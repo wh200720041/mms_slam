@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node name="bag1" pkg="rosbag" type="play" args="--clock -r 0.5 $(env HOME)/Downloads/dynamic_warehouse.bag" />
+
+    <param name="/use_sim_time" value="true" /> 
+
+
+<!-- run camera
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="color_width" value="1280" />
+        <arg name="color_height" value="720" />
+        <arg name="filters" value="pointcloud" />
+    </include>
+ -->
+
+    <!-- solo -->
+    <node pkg="mms_slam" name="solo_node" type="solo_node.py" output="screen">
+        <remap from="~input" to="/camera/color/image_raw" />
+        <param name="~visualization" value="true" />
+        <!-- skip how many frames per processing -->
+        <param name="~skip_frame" value="3" /> 
+        <param name="~root_path" value="$(find mms_slam)/" /> 
+    </node> 
+
+    <node pkg="mms_slam" name="mms_slam_image2pc_node" type="mms_slam_image2pc_node" output="screen">
+    </node> 
+
+    <param name="scan_period" value="0.1" />
+
+    <param name="vertical_angle" type="double" value="2.0" />
+    <param name="max_dis" type="double" value="9.0" />
+    <param name="map_resolution" type="double" value="0.03" />
+    <param name="min_dis" type="double" value="0.1" />
+    
+    <node pkg="mms_slam" type="mms_slam_laser_processing_node" name="mms_slam_laser_processing_node" output="log"/>
+    <node pkg="mms_slam" type="mms_slam_odom_estimation_node" name="mms_slam_odom_estimation_node" output="log"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="word2map_tf"  args="0 0 0 0 0 0 /base_link /camera_link 10" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mms_slam)/rviz/mms_slam.rviz" />
+
+    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_floam_ssl" ns="mms_slam" >
+        <param name="/target_frame_name" value="map" />
+        <param name="/source_frame_name" value="base_link" />
+        <param name="/trajectory_update_rate" value="10.0" />
+        <param name="/trajectory_publish_rate" value="10.0" />
+    </node>
+
+
+</launch>

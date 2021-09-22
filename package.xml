@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<package>
+  <name>mms_slam</name>
+  <version>0.0.0</version>
+
+  <description>
+    This work is created based on some optimization on SSL_SLAM
+  </description>
+
+  <maintainer email="wh200720041@gmail.com">Han Wang</maintainer>
+
+  <license>BSD</license>
+  <url>https://wanghan.pro</url>
+  <author email="wh200720041@gmail.com">Han Wang</author>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>  
+  <build_depend>rosbag</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>eigen_conversions</build_depend>
+  <build_depend>octomap_msgs</build_depend>
+  <build_depend>octomap_ros</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>rosbag</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>eigen_conversions</run_depend>
+  <run_depend>octomap_msgs</run_depend>
+  <run_depend>octomap_ros</run_depend>
+
+  <export>
+  </export>
+</package>
