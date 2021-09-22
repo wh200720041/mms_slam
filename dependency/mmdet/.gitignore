@@ -1,5 +1,4 @@
 build/
 .eggs/
-mmdet.egg-info/
 dist/
 __pycache__/
