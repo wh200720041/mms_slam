@@ -5,7 +5,7 @@ This code is modified from [SSL_SLAM](https://github.com/wh200720041/ssl_slam)
 
 **Modifier:** [Wang Han](http://wanghan.pro), Nanyang Technological University, Singapore
 
-This folder is stil under maintenance .... 
+Important! This folder is stil under maintenance .... rosbag and model will be updated later 
 
 ## 1. Solid-State Lidar Sensor Example
 ### 1.1 Scene reconstruction
