@@ -5,7 +5,20 @@ This code is modified from [SSL_SLAM](https://github.com/wh200720041/ssl_slam)
 
 **Modifier:** [Wang Han](http://wanghan.pro), Nanyang Technological University, Singapore
 
-Important! This folder is stil under maintenance .... rosbag and model will be updated later 
+## 0. AGV dataset is available online! (optional)
+### 0.1
+training
+```
+roscd mms_slam
+cd train
+```
+training
+```
+./dist_train.sh train_param.py 1
+```
+if you have multiple gpu (say 4 gpus), you can change '1' to your GPU number
+
+
 
 ## 1. Solid-State Lidar Sensor Example
 ### 1.1 Scene reconstruction
@@ -20,9 +33,9 @@ Important! This folder is stil under maintenance .... rosbag and model will be u
 <img width="65%" src="/img/3D_reconstruction.png"/>
 </p>
 
-### 1.3 Localization and Mapping with L515
+### 1.3 Localization and Mapping in dynamic environments
 <p align='center'>
-<a href="https://youtu.be/G5aruo2bSxc">
+<a href="https://youtu.be/tmWCrredJGI">
 <img width="65%" src="/img/3D_SLAM.gif"/>
 </a>
 </p>
@@ -73,35 +86,39 @@ chmod +x solo_node.py
 ```
 
 ### 3.2 install mmdetection 
-install torch version 
+create conda environment (you need to install [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) first) 
 ```
-pip install rospkg pycocotools opencv-python torch==1.7.1 torchvision==0.8.2
+conda create -n solo python=3.7 -y
+conda activate solo
 ```
-install mmdet
+
+install PyTorch and torchvision following the [official instruction](https://pytorch.org/get-started/previous-versions/) (find your cuda version)
+```
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
+conda install -c conda-forge addict rospkg pycocotools
+```
+install mmdet 2.0
 ```
 roscd mms_slam 
 cd dependencies/mmdet
 python setup.py install
 ```
-it takes a while (a few mins to install)
+it takes a while (a few minutes to install)
 
 ### 3.3 Download test rosbag and model
-You may download our [trained model]() and [recorded data (to be updated)]() if you dont have realsense L515, and by defult the file should be under /home/user/Downloads
+You may download our [trained model](https://drive.google.com/file/d/10ZwHyT7Ql1DYofe4p1jCEAj4rEfg499J/view?usp=sharing) and [recorded data](https://drive.google.com/file/d/1XX4M-aB5aFtj7gPMJKVAeRICdEEAT-EG/view?usp=sharing) if you dont have realsense L515, and by defult the file should be under /home/username/Downloads
 
 put model under mms_slam/config/  
-
-
-
-### 3.4 install mmdetection 
 ```
-roscd mms_slam 
-cd dependencies/mmdetection
-pip install rospkg pycocotools opencv-python torch alfred-py==2.8.4
-python setup.py install
+cp ~/Downloads/trained_model.pth ~/catkin_ws/src/MMS_SLAM/config/
 ```
-it takes a while (a few mins to install)
+unzip rosbag file under Download folder
+```
+cd ~/Downloads
+unzip ~/Downloads/dynamic_warehouse.zip
+```
 
-### 3.3 Launch ROS
+### 3.4 Launch ROS
 if you would like to create the map at the same time, you can run 
 ```
     roslaunch mms_slam mms_slam_mapping.launch
@@ -115,6 +132,11 @@ if only localization is required, you may refer to run
 if you would like to test instance segmentation results only , you can run
 ```
     roslaunch mms_slam mms_slam_detection.launch
+```
+
+if ModuleNotFoundError: No module named 'alfred', install alfrey-py from pip install
+```
+pip install alfred-py
 ```
 
 ## 4. Sensor Setup
