@@ -5,20 +5,7 @@ This code is modified from [SSL_SLAM](https://github.com/wh200720041/ssl_slam)
 
 **Modifier:** [Wang Han](http://wanghan.pro), Nanyang Technological University, Singapore
 
-## 0. AGV dataset is available online! (optional)
-### 0.1
-training
-```
-roscd mms_slam
-cd train
-```
-training
-```
-./dist_train.sh train_param.py 1
-```
-if you have multiple gpu (say 4 gpus), you can change '1' to your GPU number
-
-
+[Update] AGV dataset is available online! (optional)
 
 ## 1. Solid-State Lidar Sensor Example
 ### 1.1 Scene reconstruction
@@ -176,6 +163,31 @@ and comment rosbag play like this
 -->
 ```
 
-## 5 Acknowlegement
+## 6 Training on AGV & Human dataset
+### 6.1
+The human data are collected from COCO dataset [Download here](http://images.cocodataset.org/zips/train2017.zip) (18G)
+The AGV data are manually collected and labelled [Download]()
+```
+cd ~/Downloads
+unzip train2017.zip
+unzip val2017.zip
+unzip agv_data.zip
+mv ~/Downloads/train2017 ~/Downloads/train_data
+mv ~/Downloads/val2017 ~/Downloads/train_data
+mv ~/Downloads/train_data/agv_data/* ~/Downloads/train_data/train2017
+```
+note that it takes a while to unzip
+
+to train a model
+```
+roscd mms_slam
+cd train
+python train.py train_param.py
+```
+if you have multiple gpu (say 4 gpus), you can change '1' to your GPU number
+
+
+
+## 7 Acknowlegement
 Thanks for [A-LOAM](https://github.com/HKUST-Aerial-Robotics/A-LOAM) and [LOAM](https://github.com/laboshinl/loam_velodyne) and [LOAM_NOTED](https://github.com/cuitaixiang/LOAM_NOTED) and [MMDetection](https://github.com/open-mmlab/mmdetection) and [SOLO](https://github.com/WXinlong/SOLO).
 

@@ -11,12 +11,7 @@ model = dict(
         conv_cfg=dict(type='ConvAWS'),
         sac=dict(type='SAC', use_deform=True),
         stage_with_sac=(False, True, True, True),
-        style='pytorch',
-        dcn=dict(
-            type='DCN',
-            deformable_groups=1,
-            fallback_on_stride=False),
-        stage_with_dcn=(False, True, True, True)),
+        style='pytorch'),
     neck=dict(
         type='FPN',
         in_channels=[256, 512, 1024, 2048],
@@ -24,18 +19,16 @@ model = dict(
         start_level=0,
         num_outs=5),
     bbox_head=dict(
-        type='SOLOv2LightHead',
-        num_classes=3,
+        type='SOLOv2Head',
+        num_classes=81,
         in_channels=256,
-        stacked_convs=3,
-        use_dcn_in_tower=True,
-        type_dcn='DCN',
-        seg_feat_channels=256,
+        stacked_convs=4,
+        seg_feat_channels=512,
         strides=[8, 8, 16, 32, 32],
-        scale_ranges=((1, 64), (32, 128), (64, 256), (128, 512), (256, 2048)),
+        scale_ranges=((1, 96), (48, 192), (96, 384), (192, 768), (384, 2048)),
         sigma=0.2,
         num_grids=[40, 36, 24, 16, 12],
-        ins_out_channels=128,
+        ins_out_channels=256,
         loss_ins=dict(
             type='DiceLoss',
             use_sigmoid=True,
@@ -52,7 +45,7 @@ model = dict(
             out_channels=128,
             start_level=0,
             end_level=3,
-            num_classes=128,
+            num_classes=256,
             norm_cfg=dict(type='GN', num_groups=32, requires_grad=True)),
     )
 # training and testing settings
@@ -66,16 +59,27 @@ test_cfg = dict(
     sigma=2.0,
     max_per_img=100)
 # dataset settings
-dataset_type = 'MyDataset'
+dataset_type = 'CocoDataset'
 data_root = '/home/icehan/Downloads/train_data/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
+     dict(
+        type='InstaBoost',
+        action_candidate=('normal', 'horizontal', 'skip'),
+        action_prob=(1, 0, 0),
+        scale=(0.8, 1.2),
+        dx=15,
+        dy=15,
+        theta=(-1, 1),
+        color_prob=0.5,
+        hflag=False,
+        aug_ratio=0.5),
     dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
     dict(type='Resize',
-         img_scale=[(852, 512), (852, 480), (852, 448),
-                   (852, 416), (852, 384), (852, 352)],
+         img_scale=[(1333, 800), (1333, 768), (1333, 736),
+                    (1333, 704), (1333, 672), (1333, 640)],
          multiscale_mode='value',
          keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
@@ -88,7 +92,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(852, 512),
+        img_scale=(1333, 800),
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -104,8 +108,8 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations_trainval2017/annotations/agv_ppl_copy_paste_with_cocohuman_2.json',
-        img_prefix=data_root + 'agv3/',
+        ann_file=data_root + 'annotations_trainval2017/annotations/instances_train2017.json',
+        img_prefix=data_root + 'train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -126,22 +130,23 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.01,
-    step=[27, 33, 65])
+    step=[27, 33])
 checkpoint_config = dict(interval=1)
+evaluation = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=5,
+    interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 72
+total_epochs = 40
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/solov2_light_512_r50_agv_ppl_2'
+work_dir = './work_dirs/solov2_coco'
 load_from = None
-resume_from = './work_dirs/solov2_light_512_r50_agv_ppl_2/latest.pth'
+resume_from = None #'./work_dirs/solov2_coco/latest.pth'
 workflow = [('train', 1)]

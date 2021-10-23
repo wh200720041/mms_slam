@@ -19,28 +19,29 @@ class MyDataset(CustomDataset):
             for i, cat_id in enumerate(self.cat_ids)
         }
         self.img_ids = self.coco.getImgIds()
-        img_infos = []
+        data_infos = []
         for i in self.img_ids:
             info = self.coco.loadImgs([i])[0]
             info['filename'] = info['file_name']
-            img_infos.append(info)
-        with open('listfile1.txt', 'w') as filehandle:
-            filehandle.writelines("%s\n" % info for info in img_infos)
-        return img_infos
+            data_infos.append(info)
+        with open('file_info.txt', 'w') as filehandle:
+            filehandle.writelines("%s\n" % info for info in data_infos)
+        return data_infos
 
     def get_ann_info(self, idx):
-        img_id = self.img_infos[idx]['id']
+        img_id = self.data_infos[idx]['id']
         ann_ids = self.coco.getAnnIds(imgIds=[img_id])
         ann_info = self.coco.loadAnns(ann_ids)
-        with open('get_ann_info2.txt', 'w') as filehandle:
+        # print("image-id", img_id, "ann_ids-id",ann_ids)
+        with open('ann_info.txt', 'a') as filehandle:
             filehandle.writelines("%s\n" % info for info in ann_info)
-        return self._parse_ann_info(self.img_infos[idx], ann_info)
+        return self._parse_ann_info(self.data_infos[idx], ann_info)
 
     def _filter_imgs(self, min_size=32):
         """Filter images too small or without ground truths."""
         valid_inds = []
         ids_with_ann = set(_['image_id'] for _ in self.coco.anns.values())
-        for i, img_info in enumerate(self.img_infos):
+        for i, img_info in enumerate(self.data_infos):
             if self.filter_empty_gt and self.img_ids[i] not in ids_with_ann:
                 continue
             if min(img_info['width'], img_info['height']) >= min_size:

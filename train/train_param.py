@@ -1,4 +1,5 @@
 # model settings
+import getpass
 model = dict(
     type='SOLOv2',
     pretrained='torchvision://resnet50',
@@ -67,7 +68,7 @@ test_cfg = dict(
     max_per_img=100)
 # dataset settings
 dataset_type = 'MyDataset'
-data_root = '/home/icehan/Downloads/train_data/'
+data_root = '/home/'+getpass.getuser()+'/Downloads/train_data/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -100,12 +101,12 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=2,
-    workers_per_gpu=2,
+    imgs_per_gpu=1,
+    workers_per_gpu=1,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/agv_ppl_copy_paste_with_cocohuman_2.json',
-        img_prefix=data_root + 'agv_all/agv3/',
+        ann_file=data_root + 'annotations/agv_ppl.json',
+        img_prefix=data_root + 'train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -114,7 +115,7 @@ data = dict(
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/instances_val2017.json',
+        ann_file=data_root + '[annotations/instances_val2017.json',
         img_prefix=data_root + 'val2017/',
         pipeline=test_pipeline))
 # optimizer
@@ -141,7 +142,7 @@ total_epochs = 72
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/solov2_light_512_r50_agv_ppl_2'
+work_dir = './work_dirs/solov2_agv_ppl'
 load_from = None
-resume_from = './work_dirs/solov2_light_512_r50_agv_ppl_2/latest.pth'
+resume_from = None #'./work_dirs/solov2_agv_ppl/latest.pth'
 workflow = [('train', 1)]
