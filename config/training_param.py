@@ -1,4 +1,5 @@
 # model settings
+import getpass
 model = dict(
     type='SOLOv2',
     pretrained='torchvision://resnet50',
@@ -67,7 +68,7 @@ test_cfg = dict(
     max_per_img=100)
 # dataset settings
 dataset_type = 'MyDataset'
-data_root = '/home/delta/SOLO/data/COCO/'
+data_root = '/home/'+getpass.getuser()+'/Downloads/train_data/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -104,8 +105,8 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations_trainval2017/annotations/agv_ppl_copy_paste_with_cocohuman_2.json',
-        img_prefix=data_root + 'agv3/',
+        ann_file=data_root + 'annotations_trainval2017/annotations/agv_ppl.json',
+        img_prefix=data_root + 'train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,

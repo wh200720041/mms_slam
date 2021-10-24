@@ -8,22 +8,33 @@ This code is modified from [SSL_SLAM](https://github.com/wh200720041/ssl_slam)
 [Update] AGV dataset is available online! (optional)
 
 ## 1. Solid-State Lidar Sensor Example
-### 1.1 Scene reconstruction
+### 1.1 Scene Reconstruction in Dynamic Environments
 <p align='center'>
-<a href="https://youtu.be/Ox7yDx6JslQ">
-<img width="65%" src="/img/3D_reconstruction.gif"/>
+<a href="https://youtu.be/tmWCrredJGI">
+<img width="65%" src="/img/3DConstruction.gif"/>
 </a>
 </p>
 
-### 1.2 SFM building example
+### 1.2 Mapping result
 <p align='center'>
-<img width="65%" src="/img/3D_reconstruction.png"/>
+<img width="65%" src="/img/mapconstruction.png"/>
 </p>
 
-### 1.3 Localization and Mapping in dynamic environments
+### 1.3 Human & AGV recognition result
 <p align='center'>
-<a href="https://youtu.be/tmWCrredJGI">
-<img width="65%" src="/img/3D_SLAM.gif"/>
+<img width="65%" src="/img/agv_human_detection.png"/>
+</a>
+</p>
+
+### 1.4 Performance Evaluation
+<p align='center'>
+<img width="65%" src="/img/result_comparison.png"/>
+</a>
+</p>
+
+### 1.5 Detection Result
+<p align='center'>
+<img width="65%" src="/img/solo_result.png"/>
 </a>
 </p>
 
@@ -185,7 +196,7 @@ cd train
 python train.py train_param.py
 ```
 if you have multiple gpu (say 4 gpus), you can change '1' to your GPU number
-
+The trained model is under mms_slam/train/work_dirs/xxx.pth, 
 
 
 ## 7 Acknowlegement
