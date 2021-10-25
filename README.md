@@ -176,8 +176,8 @@ and comment rosbag play like this
 
 ## 6 Training on AGV & Human dataset
 ### 6.1
-The human data are collected from COCO dataset [Download here](http://images.cocodataset.org/zips/train2017.zip) (18G)
-The AGV data are manually collected and labelled [Download]()
+The human data are collected from COCO dataset [train2017.zip](http://images.cocodataset.org/zips/train2017.zip)(18G) and [val_2017.zip](http://images.cocodataset.org/zips/val2017.zip)(1G)
+The AGV data are manually collected and labelled [Download](https://drive.google.com/file/d/1iiPo3WzHleqn-vBoo7GctPQ1ndyUIj5_/view?usp=sharing)(1G)
 ```
 cd ~/Downloads
 unzip train2017.zip
