@@ -34,7 +34,7 @@
     <param name="min_dis" type="double" value="0.1" />
     
     <node pkg="mms_slam" type="mms_slam_laser_processing_node" name="mms_slam_laser_processing_node" output="log"/>
-    <node pkg="mms_slam" type="mms_slam_odom_estimation_node" name="mms_slam_odom_estimation_node" output="log"/>
+    <node pkg="mms_slam" type="mms_slam_odom_estimation_node" name="mms_slam_odom_estimation_node" output="screen"/>
 
     <node pkg="tf" type="static_transform_publisher" name="word2map_tf"  args="0 0 0 0 0 0 /base_link /camera_link 10" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mms_slam)/rviz/mms_slam.rviz" />

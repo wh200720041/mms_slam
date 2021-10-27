@@ -118,12 +118,9 @@ void odom_estimation(){
             }
 
 
-
             Eigen::Quaterniond q_current(odomEstimation.odom.linear());
             //q_current.normalize();
             Eigen::Vector3d t_current = odomEstimation.odom.translation();
-
-            //t_current.z() += 0.0 + total_frame/10000.0;
 
             // publish odometry
             nav_msgs::Odometry laserOdometry;
@@ -138,35 +135,6 @@ void odom_estimation(){
             laserOdometry.pose.pose.position.y = t_current.y();
             laserOdometry.pose.pose.position.z = t_current.z();
             pubLaserOdometry.publish(laserOdometry);
-
-            /*
-            if(total_frame==100) init_pose.translation() = t_current;
-            Eigen::Isometry3d error = init_pose.inverse() * odomEstimation.odom;
-            double tranlation_error = sqrt(error.translation().x() * error.translation().x() + error.translation().y() * error.translation().y()+ error.translation().z() * error.translation().z());
-            if((total_frame>100 && total_frame<190) || (total_frame>260 && total_frame<360)){
-                total_error+=tranlation_error; 
-                total_error_count++;
-            
-                if(max_error<tranlation_error) max_error = tranlation_error;
-            }
-
-            ROS_WARN("current frame %d: translation:%f max_error:%f average error%f",total_frame, tranlation_error,max_error, total_error/total_error_count);
-            */
-            //if it is an agv add yaw correction
-            // q_current.x() = 0;
-            // q_current.y() = 0;
-            // q_current.normalize();
-            
-            //output to path
-            FILE * pFile;
-            pFile = fopen ("/home/icehan/learningSLAM/src/result1.txt","a+");
-            Eigen::Matrix3d rotation_matrix =  odomEstimation.odom.rotation();
-            fprintf(pFile,"%e %e %e %e %e %e %e %e %e %e %e %e\n",
-                rotation_matrix(0,0), rotation_matrix(0,1), rotation_matrix(0,2), t_current.x(),
-                rotation_matrix(1,0), rotation_matrix(1,1), rotation_matrix(1,2), t_current.y(),
-                rotation_matrix(2,0), rotation_matrix(2,1), rotation_matrix(2,2), t_current.z()
-            );
-            fclose (pFile);
 
             static tf::TransformBroadcaster br;
             tf::Transform transform;

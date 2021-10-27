@@ -74,18 +74,9 @@ void OdomEstimationClass::updatePointsToMap(const pcl::PointCloud<pcl::PointXYZR
         printf("not enough points in map to associate, map error");
     }
 
-    //if it is an agv add yaw correction
-    // q_w_curr.x() = 0;
-    // q_w_curr.y() = 0;
-    // q_w_curr.normalize();
-    // t_w_curr.z() = 0.0;
-    
-
     odom = Eigen::Isometry3d::Identity();
     odom.linear() = q_w_curr.toRotationMatrix();
     odom.translation() = t_w_curr;
-
-
 
     addPointsToMap(downsampledEdgeCloud,downsampledSurfCloud);
 
